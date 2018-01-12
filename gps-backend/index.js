@@ -13,21 +13,53 @@ var client  = mqtt.connect(mqtt_url, { server, username, password, port });
 console.log("//////")
 console.log(client)
 console.log("//////")
-
+var data;
+var obj = {
+  _type: "location",
+  device: "mock_server",
+  tid: "se",
+  lon: -122.2174881,
+  lat: 37.484511
+}
 app.get('/', function(req, res){
   res.send("HI THERE FROM EXPRESS!");
 })
 
-var stringJson={};
-app.get('/api', function(req, res){
-  res.send(stringJson);
+var serverStringJson={};
+var phoneStringJson={}
+
+app.get('/server/api', function(req, res){
+  res.send(serverStringJson);
+})
+
+app.get('/phone/api', function(req, res){
+  res.send(phoneStringJson);
 })
 
 
 client.on('connect', function () {
   client.subscribe('owntracks/rhckipmh/phone')
+  client.subscribe('server/mock')
   // client.subscribe('presence')
-  // client.publish('presence', 'Hello mqtt2')
+  // client.publish('presence', "messageeeeeeeeeeee")
+
+  setInterval(
+
+    () => {
+      console.log("insetinterval")
+      if (obj){
+        // var latRan=(Math.random()-0.5)/100000
+        // var lonRan=(Math.random()-0.5)/100000
+        console.log("insetinterval deep")
+        var latRan=0.000008
+        var lonRan=0
+        obj={...obj, lat: obj.lat+(Math.random()>0.8?0:latRan), lon: obj.lon+(Math.random()>0.8?0:lonRan)}
+        client.publish('server/mock', JSON.stringify(obj))
+      }
+    }
+    ,100
+  )
+
 })
   // client.end()
 
@@ -36,13 +68,34 @@ client.on('error', function() {
 })
 client.on('message', function (topic, message) {
   // message is Buffer
-  console.log("message", message.toString())
+  console.log("WHAT message", message.toString())
   // var message = message.toString().
-  var data = JSON.parse(message.toString())
-  if(data._type==="location") {
-    console.log("YES")
-    stringJson=message.toString()
+  try {
+    data = JSON.parse(message.toString())
+    console.log("HERE")
+
+
+    if(data.tid==="se") {
+      obj = {
+        _type: "location",
+        tid: "se",
+        lat: data.lat,
+        lon: data.lon
+      }
+      console.log("YES")
+      // serverStringJson=message.toString()
+      serverStringJson=JSON.stringify(obj);
+    } else if (data.tid==="ph") {
+      phoneStringJson= message.toString();
+    }
+
+
+
+  } catch (e) {
+    console.log("not json String")
+    pass
   }
+
 
 })
 

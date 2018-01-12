@@ -6,3 +6,12 @@
 .App-Header {
   color: #FFFFFF;
 }
+
+.select-server div:first-of-type {
+  padding-right: 0
+}
+
+.device-dropdown {
+  width: 100%;
+  display: inline-block
+}
