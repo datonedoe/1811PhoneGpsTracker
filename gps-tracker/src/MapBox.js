@@ -119,7 +119,7 @@ class MapBox extends Component {
   flyToCurrentLocation = () => {
     this.map.flyTo({
         center: [this.state.lng, this.state.lat],
-        zoom: 14
+        zoom: 17
     });
   }
 
@@ -129,9 +129,11 @@ class MapBox extends Component {
 
     return (
       <div>
+        {/*
         <div className="whiteLetter">"this.props.lon: "{this.props.lon}, "this.props.lat: "{this.props.lat}</div>
         <h4>MAP CENTER:</h4>
         <div className="whiteLetter">lngMapCenter:  {this.state.lngMapCenter}, latMapCenter: {this.state.latMapCenter}, zoom: {this.state.zoom}</div>
+        */}
         {this.state.running===true ?
           <div><button className="btn btn-success fly" onClick={this.flyToCurrentLocation}>FLY</button></div>
           : null

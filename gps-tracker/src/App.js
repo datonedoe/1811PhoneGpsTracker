@@ -90,14 +90,7 @@ class App extends Component {
               }
         </div>*/}
 
-        {this.state.message ?
-          <div className="alert alert-danger" role="alert">
-            {
-              this.state.message
-            }
-          </div>
-          : null
-        }
+
 
 
         // <Form inline>
@@ -127,6 +120,16 @@ class App extends Component {
           </div>
       	// </Form>
 
+
+        {this.state.message ?
+          <div className="alert alert-danger" role="alert">
+            {
+              this.state.message
+            }
+          </div>
+          : null
+        }
+        
         {/*}<div className="alert alert-info" role="alert">
           <div>Message: {this.state.device? this.state.device : null}</div>
         </div>*/}
