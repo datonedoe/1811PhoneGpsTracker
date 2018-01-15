@@ -40,7 +40,7 @@ class App extends Component {
                 lon: data.lon,
                 running: true
               })
-        setTimeout(this.componentDidMount, 100)
+        setTimeout(this.componentDidMount, 3000)
       })
       .catch(err=>{
         console.log("ERROR HERE", err);
@@ -129,7 +129,7 @@ class App extends Component {
           </div>
           : null
         }
-        
+
         {/*}<div className="alert alert-info" role="alert">
           <div>Message: {this.state.device? this.state.device : null}</div>
         </div>*/}

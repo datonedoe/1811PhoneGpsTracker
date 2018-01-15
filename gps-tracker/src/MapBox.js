@@ -27,17 +27,24 @@ class MapBox extends Component {
   componentWillReceiveProps(nextProps) {
     console.log("componentWillReceiveProps");
     console.log("nextProps:", nextProps);
+    console.log("this.state", this.state);
     if (nextProps.lat !== this.state.lat || nextProps.lon !== this.state.lng || this.state.running != nextProps.running) {
       console.log("WILL UPDATE LOCATION")
-      this.componentDidMount();
-      this.setState ({
-        lng: nextProps.lon,
-        lat: nextProps.lat,
-        geojson:  [
-            [nextProps.lon, nextProps.lat]
-        ],
-        running: nextProps.running
-      })
+        if (this.state.geojson.length===0) {
+          this.setState({geojson:  [
+              [nextProps.lon, nextProps.lat]
+          ]})
+        } else {
+          this.componentDidMount();
+          this.setState ({
+            lng: nextProps.lon,
+            lat: nextProps.lat,
+            geojson:  [
+              [nextProps.lon, nextProps.lat]
+            ],
+            running: nextProps.running
+          })
+        }
     }
   }
 
@@ -57,17 +64,18 @@ class MapBox extends Component {
       });
     }
 
-    this.map.on('move', () => {
-      const { lng, lat } = this.map.getCenter();
-
-      this.setState({
-        lngMapCenter: lng.toFixed(4),
-        latMapCenter: lat.toFixed(4),
-        zoom: this.map.getZoom().toFixed(2)
-      });
-    });
+    // this.map.on('move', () => {
+    //   const { lng, lat } = this.map.getCenter();
+    //
+    //   this.setState({
+    //     lngMapCenter: lng.toFixed(4),
+    //     latMapCenter: lat.toFixed(4),
+    //     zoom: this.map.getZoom().toFixed(2)
+    //   });
+    // });
 
       // add markers to map
+      console.log("POINT GEOJSON:", this.state.geojson);
       this.state.geojson.forEach((marker) => {
         console.log("marker location", marker)
         //remove old marker
