@@ -17,7 +17,10 @@ const PI = Math.PI;
 const CLIENT_TIMER = 100000000; //time of running
 
 // MOCK SERVER CONSTANTS
-const GOOGLE_MAP_API = "AIzaSyCvYTdT0e60-GPa-9gXgwGE2BOy-b68GBo"; //Google Snap To Road API
+// const GOOGLE_MAP_API = "AIzaSyCvYTdT0e60-GPa-9gXgwGE2BOy-b68GBo"; //Google Snap To Road API
+// const GOOGLE_MAP_API = "AIzaSyByF015mtxaEQGeL1HYxkD3vGW8t763_Qw"; //Google Snap To Road API
+const GOOGLE_MAP_API = "AIzaSyBFfkN0CR2DdTtiO_YTdqKCJF9mfk_SiVA"; //Google Snap To Road API
+
 const DEFAULT_LOOKOUT_DISTANCE = 0.000670582325045536;  //0.003970582325045536~1200ft
 const DEFAULT_DIRECTION_VECTOR = {x:DEFAULT_LOOKOUT_DISTANCE*Math.sqrt(2)/1200, y:DEFAULT_LOOKOUT_DISTANCE*Math.sqrt(2)/1200,}
 const DEFAULT_LOOKOUT_AMPLITUDE = 0.5*DEFAULT_LOOKOUT_DISTANCE;
@@ -151,11 +154,15 @@ const printOut = (coordinateList, moveForwardCallback, cantMoveCallback) => {
 }
 
 
+// When client is connected, listen to special topics
 client.on('connect', function () {
-  client.subscribe('owntracks/rhckipmh/phone')
-  client.subscribe('server/mock')
   if (process.argv.length===3 && process.argv[2]==='mock') {
+    client.subscribe('server/mock')
     attemptMovingForward();
+  } else if (process.argv.length===3 && process.argv[2]==='phone') {
+    client.subscribe('owntracks/rhckipmh/phone')
+  } else {
+    client.subscribe('owntracks/rhckipmh/phone')
   }
 })
 
@@ -214,8 +221,8 @@ setTimeout(function () {
   console.log("CLIENT ENDED.....")
 }, CLIENT_TIMER);
 
+
+//LISTEN TO APP
 app.listen(BACKEND_PORT, function(){
   console.log("Process is running on port: ", BACKEND_PORT);
 })
-
-console.log("run")
