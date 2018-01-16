@@ -78,48 +78,35 @@ class MapBox extends Component {
       console.log("POINT GEOJSON:", this.state.geojson);
       this.state.geojson.forEach((marker) => {
         console.log("marker location", marker)
-        //remove old marker
-        // console.log("remove pre-entive marker START")
-        // var elem = document.querySelector('.marker');
-        // if (elem !==null) {
-        //   elem.parentNode.removeChild(elem);
-        //   console.log("remove pre-emtive marker COMPLETE")
-        // } else {
-        //   console.log("No pre-emtive marker")
-        // }
 
-        var elem = document.getElementsByClassName("marker");
+
+        //remove all marker
+        var elem = document.getElementsByClassName("marker-pin");
+        while(elem[0]) {
+            elem[0].parentNode.removeChild(elem[0]);
+        }
+        var elem = document.getElementsByClassName("marker-car");
         while(elem[0]) {
             elem[0].parentNode.removeChild(elem[0]);
         }
 
         // create a HTML element for each feature
+        // add the corresponing style to the marker
         var el = document.createElement('div');
-        el.className = 'marker';
+        if (this.props.device ==="phone")
+          el.className = 'marker-pin';
+        else if (this.props.device ==="server")
+          el.className = 'marker-car';
 
         // make a marker for each feature and add to the map
           var markerLayer=new mapboxgl.Marker(el).setLngLat(marker).addTo(this.map)
-        // }
 
-        // var elem = document.getElementsByClassName("marker");
-        // console.log(elem)
-        // setTimeout(() => {
-        //   markerLayer.addTo(map)
-        // },4000)
-
-
-          // setTimeout(() =>{
-          //   console.log("remove marker")
-          //   var elem = document.querySelector('.marker');
-          //   elem.parentNode.removeChild(elem);
-          // }
-          // ,10000)
-
-
-        // )
       });
 
-      this.map.addControl(new mapboxgl.NavigationControl());
+      if (!this.state.controlAdded) {
+        this.map.addControl(new mapboxgl.NavigationControl());
+        this.setState({controlAdded: true})
+      }
       console.log("END COMPONENT DID MOUNT")
 
   }
@@ -127,7 +114,7 @@ class MapBox extends Component {
   flyToCurrentLocation = () => {
     this.map.flyTo({
         center: [this.state.lng, this.state.lat],
-        zoom: 17
+        zoom: 14
     });
   }
 

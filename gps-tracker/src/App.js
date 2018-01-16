@@ -3,10 +3,14 @@ import MapBox from './MapBox';
 import "./App.css";
 import {FormControl,FormGroup, ControlLabel, Button, Form} from 'react-bootstrap'
 
+
+const REFRESH_TIME = 150; //time between getting new location point
+
 class App extends Component {
   constructor(props) {
     super(props);
 
+    // initial location
     this.state = {
       running: false,
       lat: 38.9911291,
@@ -16,19 +20,18 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    console.log("APP.JS componentDidMount")
     const url=`http://localhost:3001/${this.state.device}/api`;
     console.log("URL", url);
 
+    // FETCH POINT FROM API
     if(this.state.goFetch===true) {
       console.log("FETCHING...")
       fetch(url)
       .then(data =>{
-        // console.log(data)
         if (data) {
           return data.json()
         } else {
-          throw new Error("DARWIN Server Error")
+          throw new Error("Server Error")
         }
       }
       )
@@ -40,7 +43,7 @@ class App extends Component {
                 lon: data.lon,
                 running: true
               })
-        setTimeout(this.componentDidMount, 3000)
+        setTimeout(this.componentDidMount, REFRESH_TIME)
       })
       .catch(err=>{
         console.log("ERROR HERE", err);
@@ -51,49 +54,25 @@ class App extends Component {
     }
   }
 
-
+  // stop tracking location
   stopTrackingHandle = () => {
-    // if (this.state.running) {
-      // this.setState({goFetch: false, runnging: false})
-    // } else {
       this.setState({goFetch: false, running: false, message: null}, this.componentDidMount)
-    // }
-
-    // this.props.endClientClicked();
   }
 
+  // start tracking location
   startTrackingHandle = () => {
     if (this.state.device ==="placeholder") {
       this.setState({message: "Please select a device"})
     } else {
       this.setState({message: null, goFetch: true, error: false}, this.componentDidMount)
     }
-
-    // this.props.startClientClicked();
   }
+
   render() {
     return (
       <div className="container">
         <h1 className="App-Header">Location Tracker</h1>
 
-
-
-      {/*}  <div className="container">
-          {this.state.goFetch ?
-
-            (this.state.error?
-              <button className="btn btn-danger btn-block" onClick={() =>this.stopTrackingHandle()}>TRY AGAIN</button>
-              :
-              <button className="btn btn-warning btn-block" onClick={() =>this.stopTrackingHandle()}>STOP TRACKING</button>)
-                :
-                <button className="btn btn-success btn-block" onClick={() =>this.startTrackingHandle()}>START TRACKING</button>
-              }
-        </div>*/}
-
-
-
-
-        // <Form inline>
 
           <div className="row select-server">
             <div className="col-xs-7 col-sm-7 col-md-7">
@@ -118,7 +97,6 @@ class App extends Component {
                   }
             </div>
           </div>
-      	// </Form>
 
 
         {this.state.message ?
@@ -130,12 +108,8 @@ class App extends Component {
           : null
         }
 
-        {/*}<div className="alert alert-info" role="alert">
-          <div>Message: {this.state.device? this.state.device : null}</div>
-        </div>*/}
-
         <div>
-          <MapBox lat={this.state.lat} lon={this.state.lon} running={this.state.running}/>
+          <MapBox lat={this.state.lat} lon={this.state.lon} running={this.state.running} device={this.state.device}/>
         </div>
 
         <footer className="bottom text-center">(c) 2018 DatOneDoe.com</footer>
