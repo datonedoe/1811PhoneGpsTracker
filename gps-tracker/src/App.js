@@ -4,7 +4,7 @@ import "./App.css";
 import {FormControl,FormGroup, ControlLabel, Button, Form} from 'react-bootstrap'
 
 
-const REFRESH_TIME = 150; //time between getting new location point
+const REFRESH_TIME = 400; //time between getting new location point
 
 class App extends Component {
   constructor(props) {
