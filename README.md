@@ -13,7 +13,7 @@ DEMO with OwnTracks
 
 ### EXTRA:
 - Autonomous simulation added to the problem.
-  - Given a GPS location of a device (ex: car), display that location on the map then make that device change its locations in such away that it mimics a vehicle moving on street.
+  - Given a GPS location of a device (ex: car), display that location on the map then make that device change its locations in such away that it mimics a vehicle moving on the roads.
   
 DEMO with autonomous simulation:
 
